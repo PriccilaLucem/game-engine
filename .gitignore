@@ -1,0 +1,9 @@
+include/
+obj/
+bin/
+lib/
+build/
+*.exe
+*.o
+*.log
+*.tmp

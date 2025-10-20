@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "*.c": "c",
+        "sdl.h": "c",
+        "stdlib.h": "c",
+        "initsdl.h": "c",
+        "log.h": "c"
+    },
+    "cmake.ignoreCMakeListsMissing": true
+}
