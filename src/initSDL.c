@@ -1,7 +1,5 @@
 #include "./initSDL.h"
-#include "interface/ui_element.h"
-#include "interface/ui_button.h"
-#include "interface/ui_label.h"
+#include "./interface/screen/main_screen/main_screen.h"
 
 SDLContext* init_sdl(void) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -15,7 +13,7 @@ SDLContext* init_sdl(void) {
     
     log_message(LOG_LEVEL_INFO, "SDL and TTF initialized successfully.", __FILE__);
 
-    SDLContext* context = malloc(sizeof(SDLContext));
+    SDLContext* context = (SDLContext*) malloc(sizeof(SDLContext));
     if (!context) {
         log_message(LOG_LEVEL_ERROR, "Failed to allocate SDLContext", __FILE__);
         exit(1);
@@ -66,13 +64,10 @@ void close_sdl(void) {
     log_message(LOG_LEVEL_INFO, "SDL and TTF quit successfully.", __FILE__);
 }
 
-void simple_button_click(UIElement* element, int x, int y) {
-    log_message(LOG_LEVEL_INFO, "Button clicked!", __FILE__);
-}
+
 
 void main_loop(SDLContext* context){
     SDL_Event event;
-    int running = 1;
     
     // Load font
     TTF_Font* font = TTF_OpenFont("C:/Windows/Fonts/arial.ttf", 24);
@@ -80,45 +75,28 @@ void main_loop(SDLContext* context){
         log_message(LOG_LEVEL_ERROR, "Failed to load font", __FILE__);
         return;
     }
+    // Initialize UI
+    UI_Init(context->renderer);
+    UI_LoadLayout("assets/ui/main_menu.xml");
     
-    // Create UI manager
-    UIManager* ui_manager = ui_manager_create(context->renderer);
-    if (!ui_manager) {
-        log_message(LOG_LEVEL_ERROR, "Failed to create UI manager", __FILE__);
-        TTF_CloseFont(font);
-        return;
-    }
+    int running = 1;
     
-    // Create button
-    UIElement* button = ui_button_create(300, 250, 200, 50, "Click Me", font);
-    if (button) {
-        ui_button_set_callback(button, simple_button_click);
-        ui_manager_add_element(ui_manager, button);
-    }
-    
-    // Create label
-    UIElement* label = ui_label_create(300, 200, "Simple Screen", font);
-    if (label) {
-        ui_manager_add_element(ui_manager, label);
-    }
-
     while (running) {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 running = 0;
             }
-            
-            ui_manager_handle_event(ui_manager, &event);
-        }
+            UI_HandleEvent(&event);
+
+            }
 
         SDL_SetRenderDrawColor(context->renderer, 0, 0, 0, 255);
         SDL_RenderClear(context->renderer);
 
-        ui_manager_render(ui_manager);
+        UI_Render(context->renderer);
         
         SDL_RenderPresent(context->renderer);
     }
     
-    ui_manager_destroy(ui_manager);
     TTF_CloseFont(font);
 }

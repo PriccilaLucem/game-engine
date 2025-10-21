@@ -1,7 +1,7 @@
 # =========================
 # COMPILADOR
 # =========================
-CC = gcc
+CC = g++
 
 # =========================
 # DETECTAR SISTEMA
@@ -19,10 +19,11 @@ LIB_DIR = lib
 # =========================
 # FLAGS DE COMPILAÇÃO
 # =========================
-CFLAGS = -Wall -Wextra -std=c99 \
+CFLAGS = -Wall -Wextra -std=c++17 \
 	-Iinclude \
 	-Iinclude/SDL2 \
-	-Isrc
+	-Isrc \
+	-I$(LIB_DIR)/tinyxml2
 
 # =========================
 # TARGET E LDFLAGS
@@ -43,23 +44,35 @@ endif
 # FONTES DO PROJETO
 # =========================
 SRCS = $(SRC_DIR)/main.c \
-       $(SRC_DIR)/logs/log.c \
 	   $(SRC_DIR)/initSDL.c \
+       $(SRC_DIR)/logs/log.c \
 	   $(SRC_DIR)/interface/ui.c \
 	   $(SRC_DIR)/interface/button/button.c \
-	   $(SRC_DIR)/interface/text/text.c 
+	   $(SRC_DIR)/interface/text/text.c \
+	   $(LIB_DIR)/tinyxml2/tinyxml2.cpp \
+	   ${SRC_DIR}/interface/screen/main_screen/main_screen.cpp
 
-OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
+OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(filter $(SRC_DIR)/%.c,$(SRCS))) \
+       $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(filter $(SRC_DIR)/%.cpp,$(SRCS))) \
+       $(patsubst $(LIB_DIR)/%.cpp,$(OBJ_DIR)/lib_%.o,$(filter $(LIB_DIR)/%.cpp,$(SRCS)))
 
 # =========================
 # REGRAS PRINCIPAIS
 # =========================
-all: download_dlls copy_dlls $(TARGET)
+all: download_tinyxml2 download_dlls copy_dlls $(TARGET)
 
 $(TARGET): $(OBJS) | $(BIN_DIR)
 	$(CC) $(OBJS) -o $@ $(LDFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/lib_%.o: $(LIB_DIR)/%.cpp | $(OBJ_DIR)
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c $< -o $@
 
@@ -87,7 +100,26 @@ download_dlls: | $(LIB_DIR)
 		unzip -j sdl2_ttf.zip "*.dll" -d $(LIB_DIR)/; \
 		rm sdl2_ttf.zip; \
 	fi
-	@echo "✅ DLLs baixadas"
+	@if [ ! -d "$(LIB_DIR)/tinyxml2" ]; then \
+		curl -L https://github.com/leethomason/tinyxml2/archive/refs/heads/master.zip -o tinyxml2.zip; \
+		unzip -q tinyxml2.zip -d $(LIB_DIR); \
+		mv $(LIB_DIR)/tinyxml2-master $(LIB_DIR)/tinyxml2; \
+		rm tinyxml2.zip; \
+	fi
+	@echo "✅ DLLs e tinyxml2 baixados"
+
+# =========================
+# DOWNLOAD DO TINYXML2
+# =========================
+download_tinyxml2: | $(LIB_DIR)
+	@echo "🔽 Baixando TinyXML2..."
+	@if [ ! -d "$(LIB_DIR)/tinyxml2" ]; then \
+		curl -L https://github.com/leethomason/tinyxml2/archive/refs/tags/10.0.0.zip -o tinyxml2.zip; \
+		unzip -o tinyxml2.zip -d $(LIB_DIR)/; \
+		mv $(LIB_DIR)/tinyxml2-* $(LIB_DIR)/tinyxml2; \
+		rm tinyxml2.zip; \
+	fi
+	@echo "✅ TinyXML2 baixado com sucesso"
 
 copy_dlls: | $(BIN_DIR)
 	@echo "📋 Copiando DLLs..."
