@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui>
+    <label id="title" text="Engine Settings" x="300" y="50" w="200" h="40"/>
+    
+    <!-- Graphics Settings -->
+    <label id="graphics_label" text="Graphics" x="100" y="120" w="100" h="30"/>
+    <button id="resolution_btn" text="1920x1080" x="220" y="120" w="150" h="30"/>
+    <button id="fullscreen_btn" text="Fullscreen: ON" x="380" y="120" w="150" h="30"/>
+    <button id="vsync_btn" text="VSync: ON" x="540" y="120" w="120" h="30"/>
+    
+    <!-- Audio Settings -->
+    <label id="audio_label" text="Audio" x="100" y="170" w="100" h="30"/>
+    <button id="master_vol" text="Master: 100%" x="220" y="170" w="150" h="30"/>
+    <button id="sfx_vol" text="SFX: 80%" x="380" y="170" w="120" h="30"/>
+    <button id="music_vol" text="Music: 60%" x="510" y="170" w="120" h="30"/>
+    
+    <!-- Input Settings -->
+    <label id="input_label" text="Input" x="100" y="220" w="100" h="30"/>
+    <button id="mouse_sens" text="Mouse Sens: 1.0" x="220" y="220" w="150" h="30"/>
+    <button id="invert_y" text="Invert Y: OFF" x="380" y="220" w="120" h="30"/>
+    
+    <!-- Performance Settings -->
+    <label id="perf_label" text="Performance" x="100" y="270" w="100" h="30"/>
+    <button id="fps_limit" text="FPS Limit: 60" x="220" y="270" w="120" h="30"/>
+    <button id="shadows" text="Shadows: HIGH" x="350" y="270" w="120" h="30"/>
+    <button id="textures" text="Textures: HIGH" x="480" y="270" w="120" h="30"/>
+    
+    <!-- Action Buttons -->
+    <button id="apply_btn" text="Apply" x="250" y="350" w="100" h="40"/>
+    <button id="reset_btn" text="Reset" x="370" y="350" w="100" h="40"/>
+    <button id="back_btn" text="Back" x="490" y="350" w="100" h="40"/>
+</ui>z

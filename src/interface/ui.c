@@ -1,57 +1,47 @@
 #include "./ui.h"
-#include <stdlib.h>
+#include <stdbool.h>
+#include <stdio.h>
 
-UI* init_UI(SDL_Renderer* renderer, SDL_Window* window, const char* title, int width, int height, const char* font_path, int font_size, const char* button_label){
-    UI* ui = (UI*)malloc(sizeof(UI));
-    if(!ui){
-        log_message(LOG_LEVEL_ERROR, "Failed to allocate memory for UI", __FILE__);
-        exit(1);
-    }
-    ui->window = window;
-    ui->renderer = renderer;
-    ui->font = TTF_OpenFont(font_path, font_size);
-    
-    if(!ui->font){
-        log_message(LOG_LEVEL_ERROR, TTF_GetError(), __FILE__);
-        free(ui);
-        exit(1);
-    }
-    ui->title = init_text(title, 50, 20, font_size, font_path);
-    if(!ui->title){
-        TTF_CloseFont(ui->font);
-        free(ui);
-        exit(1);
-    }
-    ui->button = init_button(50, 100, 200, 50, button_label);
-    if(!ui->button){
-        free_text(ui->title);
-        TTF_CloseFont(ui->font);
-        free(ui);
-        exit(1);
-    }
-    return ui;
-}
+static UIState current_state = UI_MAIN_MENU;
+static UIState last_state = UI_OPTIONS;
+static bool ui_loaded = false;
 
-void render_UI(UI* ui, SDL_Color text_color, SDL_Color button_color){
-    if(ui->title){
-        render_text(ui->title, ui->renderer, text_color);
-    }
-    if(ui->button){
-        render_button(ui->renderer, ui->font, ui->button, text_color, button_color);
+static void load_ui_for_state(UIState state, SDL_Renderer* renderer) {
+    UI_Clear();
+    UI_Init(renderer);
+
+
+    switch (state) {
+        case UI_MAIN_MENU:
+            UI_LoadLayout("assets/ui/main_menu.xml");
+            break;
+
+        case UI_OPTIONS:
+            UI_LoadLayout("assets/ui/options_menu.xml");
+            break;
+
+        default:
+            printf("[UI] Estado de UI desconhecido: %d\n", (int)state);
+            break;
     }
 }
 
-void free_UI(UI* ui){
-    if(ui){
-        if(ui->button){
-            free_button(ui->button);
-        }
-        if(ui->title){
-            free_text(ui->title);
-        }
-        if(ui->font){
-            TTF_CloseFont(ui->font);
-        }
-        free(ui);
+void UI_SetState(UIState state) {
+    if (state != current_state) {
+        current_state = state;
+        ui_loaded = false;
     }
+}
+
+UIState UI_GetState(void) {
+    return current_state;
+}
+
+void UI_RenderCurrent(SDL_Renderer* renderer, TTF_Font* font) {
+    if (!ui_loaded) {
+        load_ui_for_state(current_state, renderer);
+        ui_loaded = true;
+    }
+
+    UI_Render(renderer, font);
 }

@@ -19,5 +19,4 @@ void close_sdl(void);
 void free_sdl(SDLContext* context);
 void main_loop(SDLContext* context);
 
-
 #endif

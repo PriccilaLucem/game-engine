@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        "*.c": "c",
+        "screen_loader.h": "c",
+        "ui.h": "c",
+        "xstring": "cpp",
+        "functional": "c",
+        "initsdl.h": "c",
+        "xtree": "cpp",
+        "xiosbase": "c",
+        "vector": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
+}

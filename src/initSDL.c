@@ -1,5 +1,6 @@
 #include "./initSDL.h"
-#include "./interface/screen/main_screen/main_screen.h"
+#include "./interface/ui.h"
+#include "./logs/log.h"
 
 SDLContext* init_sdl(void) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -65,7 +66,6 @@ void close_sdl(void) {
 }
 
 
-
 void main_loop(SDLContext* context){
     SDL_Event event;
     
@@ -75,9 +75,11 @@ void main_loop(SDLContext* context){
         log_message(LOG_LEVEL_ERROR, "Failed to load font", __FILE__);
         return;
     }
-    // Initialize UI
+
     UI_Init(context->renderer);
-    UI_LoadLayout("assets/ui/main_menu.xml");
+    UI_SetState(UI_MAIN_MENU);
+
+    UI_LoadLayout("assets/ui/main_menu.xml");  // <-- adicione aqui (ou o nome do seu XML)
     
     int running = 1;
     
@@ -87,16 +89,11 @@ void main_loop(SDLContext* context){
                 running = 0;
             }
             UI_HandleEvent(&event);
-
-            }
-
-        SDL_SetRenderDrawColor(context->renderer, 0, 0, 0, 255);
-        SDL_RenderClear(context->renderer);
-
-        UI_Render(context->renderer);
-        
+        }
+        UI_RenderCurrent(context->renderer, font);
         SDL_RenderPresent(context->renderer);
     }
-    
+
+    UI_Quit(); // 💡 limpa a memória da UI
     TTF_CloseFont(font);
 }

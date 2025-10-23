@@ -47,10 +47,10 @@ SRCS = $(SRC_DIR)/main.c \
 	   $(SRC_DIR)/initSDL.c \
        $(SRC_DIR)/logs/log.c \
 	   $(SRC_DIR)/interface/ui.c \
-	   $(SRC_DIR)/interface/button/button.c \
-	   $(SRC_DIR)/interface/text/text.c \
 	   $(LIB_DIR)/tinyxml2/tinyxml2.cpp \
-	   ${SRC_DIR}/interface/screen/main_screen/main_screen.cpp
+	   $(SRC_DIR)/interface/screen/screen_loader.cpp \
+	   $(SRC_DIR)/interface/screen/screen_loader_render.cpp \
+	   $(SRC_DIR)/interface/screen/screen_loader_parse.cpp
 
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(filter $(SRC_DIR)/%.c,$(SRCS))) \
        $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(filter $(SRC_DIR)/%.cpp,$(SRCS))) \
