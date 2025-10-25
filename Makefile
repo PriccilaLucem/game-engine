@@ -37,7 +37,7 @@ else ifeq ($(UNAME_S),Darwin)
     LDFLAGS = -L/usr/local/lib -L/opt/homebrew/lib -lSDL2 -lSDL2_ttf
 else
     TARGET = $(BIN_DIR)/engine.exe
-    LDFLAGS = -Llib -lSDL2 -lSDL2_ttf
+    LDFLAGS = -Llib -lSDL2 -lSDL2_ttf -lcomdlg32 -lole32
 endif
 
 # =========================
@@ -50,7 +50,10 @@ SRCS = $(SRC_DIR)/main.c \
 	   $(LIB_DIR)/tinyxml2/tinyxml2.cpp \
 	   $(SRC_DIR)/interface/screen/screen_loader.cpp \
 	   $(SRC_DIR)/interface/screen/screen_loader_render.cpp \
-	   $(SRC_DIR)/interface/screen/screen_loader_parse.cpp
+	   $(SRC_DIR)/interface/screen/screen_loader_parse.cpp \
+	   $(SRC_DIR)/open_folder/list_file.cpp \
+	   $(SRC_DIR)/open_folder/open_folder.c \
+	   
 
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(filter $(SRC_DIR)/%.c,$(SRCS))) \
        $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(filter $(SRC_DIR)/%.cpp,$(SRCS))) \

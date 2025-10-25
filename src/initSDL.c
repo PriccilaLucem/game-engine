@@ -54,7 +54,6 @@ void free_sdl(SDLContext* context) {
             SDL_DestroyWindow(context->window);
             log_message(LOG_LEVEL_INFO, "SDL Window destroyed successfully.", __FILE__);
         }
-        // UI cleanup handled by screen manager
         free(context); 
     }
 }
@@ -79,7 +78,7 @@ void main_loop(SDLContext* context){
     UI_Init(context->renderer);
     UI_SetState(UI_MAIN_MENU);
 
-    UI_LoadLayout("assets/ui/main_menu.xml");  // <-- adicione aqui (ou o nome do seu XML)
+    UI_LoadLayout("assets/ui/main_menu.xml"); 
     
     int running = 1;
     
@@ -94,6 +93,6 @@ void main_loop(SDLContext* context){
         SDL_RenderPresent(context->renderer);
     }
 
-    UI_Quit(); // 💡 limpa a memória da UI
+    UI_Quit();
     TTF_CloseFont(font);
 }

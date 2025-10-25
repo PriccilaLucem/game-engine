@@ -3,8 +3,9 @@
 #include <stdio.h>
 
 static UIState current_state = UI_MAIN_MENU;
-static UIState last_state = UI_OPTIONS;
+static UIState last_state = UI_CHOOSE_FOLDER;
 static bool ui_loaded = false;
+static void setup_main_menu_callbacks();
 
 static void load_ui_for_state(UIState state, SDL_Renderer* renderer) {
     UI_Clear();
@@ -14,11 +15,11 @@ static void load_ui_for_state(UIState state, SDL_Renderer* renderer) {
     switch (state) {
         case UI_MAIN_MENU:
             UI_LoadLayout("assets/ui/main_menu.xml");
+            setup_main_menu_callbacks();
             break;
-
-        case UI_OPTIONS:
-            UI_LoadLayout("assets/ui/options_menu.xml");
-            break;
+        case UI_CHOOSE_FOLDER:
+            UI_LoadLayout("assets/ui/choose_folder.xml");
+            break; 
 
         default:
             printf("[UI] Estado de UI desconhecido: %d\n", (int)state);
@@ -44,4 +45,14 @@ void UI_RenderCurrent(SDL_Renderer* renderer, TTF_Font* font) {
     }
 
     UI_Render(renderer, font);
+}
+
+static void setup_main_menu_callbacks() {
+    UI_SetOnClick("new_project", [](UIElement* e) {
+        open_file_dialog();
+    });
+
+    UI_SetOnClick("load_project", [](UIElement* e) {
+        open_folder_dialog();
+});
 }

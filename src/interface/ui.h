@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include "./screen/screen_loader.h"  
+#include "../open_folder/open_folder.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -11,7 +12,7 @@ extern "C" {
 
 typedef enum {
     UI_MAIN_MENU,
-    UI_OPTIONS
+    UI_CHOOSE_FOLDER,
 } UIState;
 
 void UI_SetState(UIState state);

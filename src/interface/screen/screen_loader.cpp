@@ -133,3 +133,7 @@ static TTF_Font* get_font(int size) {
     font_cache[size] = f;
     return f;
 }
+
+void add_calledback_to_button(const char* id, UI_OnClick callback) {
+    UI_SetOnClick(id, callback);
+}
